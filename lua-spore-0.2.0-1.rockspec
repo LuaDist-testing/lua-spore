@@ -1,17 +1,17 @@
 -- This file was automatically generated for the LuaDist project.
 
 package = 'lua-Spore'
-version = '0.1.6-1'
+version = '0.2.0-1'
 -- LuaDist source
 source = {
-  tag = "0.1.6-1",
+  tag = "0.2.0-1",
   url = "git://github.com/LuaDist-testing/lua-spore.git"
 }
 -- Original source
 -- source = {
---     url = 'http://cloud.github.com/downloads/fperrad/lua-Spore/lua-spore-0.1.6.tar.gz',
---     md5 = 'b7a5bc8b0212fe6d15731b859bf26b86',
---     dir = 'lua-Spore-0.1.6',
+--     url = 'http://cloud.github.com/downloads/fperrad/lua-Spore/lua-spore-0.2.0.tar.gz',
+--     md5 = '348d9a293b7917a5e39ebecf89d69615',
+--     dir = 'lua-Spore-0.2.0',
 -- }
 description = {
     summary = "a generic ReST client",
@@ -30,7 +30,7 @@ dependencies = {
     'lua >= 5.1',
     'luasocket >= 2.0.2',
 --    'luasec >= 0.4',            -- libssl-dev
-    'luajson >= 1.1',
+    'luajson >= 1.3',
 --    'luaexpat >= 1.1.0',        -- libexpat1-dev
 --    'luayaml >= 0.5.6',         -- syck 0.55
 --    'lualogging >= 1.1.4',

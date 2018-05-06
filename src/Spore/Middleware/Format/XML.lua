@@ -3,6 +3,7 @@
 --
 -- see http://search.cpan.org/~grantm/XML-Simple/
 
+local ipairs = ipairs
 local pairs = pairs
 local tostring = tostring
 local type = type
@@ -141,7 +142,7 @@ function m:call (req)
     end
     req.headers['accept'] = 'text/xml'
     return  function (res)
-                if res.body and res.body ~= '' then
+                if type(res.body) == 'string' and res.body:match'%S' then
                     local r, msg = xml.parse(res.body)
                     if r then
                         res.body = { [r.tag] = collapse(r, self) }
