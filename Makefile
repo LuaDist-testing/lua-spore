@@ -9,18 +9,22 @@ endif
 LUAVER  := 5.1
 PREFIX  := /usr/local
 DPREFIX := $(DESTDIR)$(PREFIX)
+BINDIR  := $(DPREFIX)/bin
 LIBDIR  := $(DPREFIX)/share/lua/$(LUAVER)
 
 all:
 	@echo "Nothing to build here, you can just make install"
 
 install:
+	mkdir -p $(BINDIR)
+	cp src/discovery2spore                          $(BINDIR)
 	mkdir -p $(LIBDIR)/Spore/Middleware/Auth
 	mkdir -p $(LIBDIR)/Spore/Middleware/Format
 	mkdir -p $(LIBDIR)/Spore/Middleware/Parameter
 	mkdir -p $(LIBDIR)/Spore/Middleware/Proxy
 	cp src/Spore.lua                                $(LIBDIR)
 	cp src/Spore/Core.lua                           $(LIBDIR)/Spore
+	cp src/Spore/GoogleDiscovery.lua                $(LIBDIR)/Spore
 	cp src/Spore/Protocols.lua                      $(LIBDIR)/Spore
 	cp src/Spore/Request.lua                        $(LIBDIR)/Spore
 	cp src/Spore/Middleware/Cache.lua               $(LIBDIR)/Spore/Middleware

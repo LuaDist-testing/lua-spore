@@ -2,13 +2,13 @@
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>lua-Spore - Homepage</title>
+  <title>Module Spore.GoogleDiscovery</title>
     <link rel="stylesheet" href="http://www.keplerproject.org/doc.css" type="text/css"/>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta http-equiv="Author" content="Fran&ccedil;ois Perrad"/>
   <meta http-equiv="Language" content="en"/>
-  <meta http-equiv="Description" content="Homepage of lua-Spore"/>
-  <meta http-equiv="Keywords" content="lua, Spore, ReST, ReSTapi, ReSTful"/>
+  <meta http-equiv="Description" content="Module Spore.GoogleDiscovery"/>
+  <meta http-equiv="Keywords" content="lua, Spore, ReST, ReSTapi, ReSTful, new_from_discovery, google, discovery"/>
 </head>
 
 <body>
@@ -28,9 +28,9 @@
 <div id="main">
 
 <div id="navigation">
-<h1>lua-Spore</h1>
+<h1>S.GoogleDiscovery</h1>
   <ul>
-    <li><strong>Home</strong>
+    <li><a href="index.html">Home</a>
       <ul>
         <li><a href="index.html#overview">Overview</a></li>
         <li><a href="index.html#references">References</a></li>
@@ -64,12 +64,12 @@
         <li><a href="middleware.html#dnt">DoNotTrack</a></li>
         <li><a href="middleware.html#logging">Logging</a></li>
         <li><a href="middleware.html#mock">Mock</a></li>
-        <li><a href="middleware.html#redirection">Redirection</a></li>
         <li><a href="middleware.html#runtime">Runtime</a></li>
+        <li><a href="middleware.html#redirection">Redirection</a></li>
         <li><a href="middleware.html#useragent">UserAgent</a></li>
       </ul>
     </li>
-    <li><a href="discovery.html">module <code>S.GoogleDiscovery</code></a>
+    <li><strong>module <code>S.GoogleDiscovery</code></strong>
       <ul>
         <li><a href="discovery.html#reference">Reference</a></li>
         <li><a href="discovery.html#examples">Examples</a></li>
@@ -86,69 +86,95 @@
 
 <div id="content">
 
-<h2><a name="overview"></a>Overview</h2>
+<h2><a name="reference"></a>Reference</h2>
 
-<p>lua-Spore is an implementation of <a href="http://github.com/SPORE/specifications">SPORE</a>
-(Specification to a POrtable Rest Environment).</p>
+<p>With this module, lua-Spore becomes a
+<a href="http://code.google.com/apis/discovery/libraries.html">Google APIs Client Library</a> for Lua.
+The list of supported APIs could be found <a href="http://code.google.com/apis/explorer/">here</a>.</p>
 
-<h2><a name="references"></a>References</h2>
+<h3>Global Functions</h3>
 
-<p>Some specifications of service are available at
-<a href="http://github.com/SPORE/api-description">http://github.com/SPORE/api-description</a>.
-</p>
+<h4><code>new_from_discovery( desc, [, { options }] )</code></h4>
 
-<h2><a name="status"></a>Status</h2>
+<p>Instanciate a ReST client from a
+<a href="http://code.google.com/apis/discovery/">Google Discovery Document</a>
+defined by an URL or a table with keys <code>api</code> and <code>version</code>.</p>
 
-<p>lua-Spore is in beta stage.</p>
-
-<p>It's developed for Lua 5.1.</p>
-
-<h2><a name="download"></a>Download</h2>
-
-<p>lua-Spore source can be downloaded from
-<a href="http://github.com/fperrad/lua-Spore/downloads/">GitHub</a> or
-<a href="http://luaforge.net/projects/lua-spore/files/">Lua Forge</a>.</p>
-
-<h2><a name="installation"></a>Installation</h2>
-
-<p>lua-Spore is available via LuaRocks:</p>
+<p>The optional table <code>options</code> allows to overwrite some parameters of the description
+(see <code>new_from_spec</code>).</p>
 
 <pre class="example">
-luarocks install lua-spore
+local discovery = require 'Spore.GoogleDiscovery'
+local client = discovery.new_from_discovery 'https://www.googleapis.com/discovery/v1/apis/urlshortener/v1/rest'
 </pre>
-
-<p>or manually (LuaSocket and LuaJSON required), with:</p>
 
 <pre class="example">
-make install
+local client = discovery.new_from_discovery { api = 'urlshortener', version = 'v1' }
 </pre>
 
-<h2><a name="test"></a>Test</h2>
 
-<p>The test suite requires the module
-<a href="http://fperrad.github.com/lua-TestMore">lua-TestMore</a>.</p>
+<h4><code>convert( gdoc )</code></h4>
+
+<p>Converts a <a href="http://code.google.com/apis/discovery/">Google Discovery Document</a>
+into a Spore Specification (both are represented by a <code>table</code>).</p>
+
+<h3>Utilities</h3>
+
+<h4><code>discovery2spore url</code></h4>
+
+<p>Converts a Google Discovery Document into a Spore Specification.
+By this way, the Spore specification could be edited/modified before use.</p>
 
 <pre class="example">
-make test
+$ discovery2spore https://www.googleapis.com/discovery/v1/apis/urlshortener/v1/rest > urlshortener.json
 </pre>
 
-<h2><a name="license"></a>Copyright and License</h2>
+<h2><a name="examples"></a>Examples</h2>
 
-<p>Copyright &copy; 2010-2011 Fran&ccedil;ois Perrad
-<a href="http://www.ohloh.net/accounts/4780?ref=Rank">
-  <img alt="ohloh profile for Fran&ccedil;ois Perrad"
-       height="24" width="32" style="border-width:0"
-       src="http://www.ohloh.net/accounts/4780/widgets/account_rank.gif"/>
-</a>
-<a href="http://www.linkedin.com/in/fperrad">
-  <img alt="View Fran&ccedil;ois Perrad's profile on LinkedIn"
-       width="80" height="15" style="border-width:0"
-       src="http://www.linkedin.com/img/webpromo/btn_liprofile_blue_80x15.gif"/>
-</a>
-</p>
+<h3>Translate &quot;Hello World&quot;</h3>
 
-<p>This library is licensed under the terms of the MIT/X11 license,
-like Lua itself.</p>
+<pre class="example">
+local client = require 'Spore.GoogleDiscovery'.new_from_discovery{
+    api = 'translate',
+    version = 'v2',
+}
+client:enable 'Format.JSON'
+client:enable('Parameter.Force', { key = '===========&lt;INSERT-YOUR-KEY&gt;===========' })
+client.translate = client.translations_list -- alias
+
+local r = client:translate{ source='en', target='fr', q=[[Hello World]] }
+for _, v in ipairs(r.body.data.translations) do
+    print(v.translatedText)
+end
+</pre>
+
+<h3>The Discovery of Discovery</h3>
+
+<p>Retrieve the list of Google APIs which are described by a Discovery Document.</p>
+
+<pre class="example">
+local discovery = require 'Spore.GoogleDiscovery'
+local client = discovery.new_from_discovery 'https://www.googleapis.com/discovery/v1/apis/discovery/v1/rest'
+client:enable 'Format.JSON'
+
+local r = client:apis_list()
+for _, item in ipairs(r.body.items) do
+    print(item.name, item.version)
+end
+</pre>
+
+<h3>URL Shortener</h3>
+
+
+<pre class="example">
+local client = require 'Spore.GoogleDiscovery'.new_from_discovery{
+    api = 'urlshortener',
+    version = 'v1',
+}
+client:enable 'Format.JSON'
+local r = client:url_insert{ payload = { longUrl = 'http://www.google.com/' } }
+print(r.body.id, r.body.longUrl)
+</pre>
 
 </div> <!-- id="content" -->
 

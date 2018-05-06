@@ -69,6 +69,12 @@
         <li><a href="middleware.html#useragent">UserAgent</a></li>
       </ul>
     </li>
+    <li><a href="discovery.html">module <code>S.GoogleDiscovery</code></a>
+      <ul>
+        <li><a href="discovery.html#reference">Reference</a></li>
+        <li><a href="discovery.html#examples">Examples</a></li>
+      </ul>
+    </li>
     <li><a href="http://luaforge.net/projects/lua-spore/">Project</a>
       <ul>
         <li><a href="http://github.com/fperrad/lua-Spore/">Git</a></li>
@@ -154,9 +160,12 @@ local r = client:upload{
 print(r.body)
 </pre>
 
-<h4><code>new_from_lua( desc )</code></h4>
+<h4><code>new_from_lua( desc [, { options }] )</code></h4>
 
 <p>Instanciate a ReST client from a Lua table.</p>
+
+<p>The optional table <code>options</code> allows to overwrite some parameters of the description
+(see <code>new_from_spec</code>).</p>
 
 <pre class="example">
 local client = require 'Spore'.new_from_lua{

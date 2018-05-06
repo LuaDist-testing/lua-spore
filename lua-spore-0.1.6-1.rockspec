@@ -1,17 +1,17 @@
 -- This file was automatically generated for the LuaDist project.
 
 package = 'lua-Spore'
-version = '0.1.5-1'
+version = '0.1.6-1'
 -- LuaDist source
 source = {
-  tag = "0.1.5-1",
+  tag = "0.1.6-1",
   url = "git://github.com/LuaDist-testing/lua-spore.git"
 }
 -- Original source
 -- source = {
---     url = 'http://cloud.github.com/downloads/fperrad/lua-Spore/lua-spore-0.1.5.tar.gz',
---     md5 = 'a6488eb2629293eafc52732bc4598427',
---     dir = 'lua-Spore-0.1.5',
+--     url = 'http://cloud.github.com/downloads/fperrad/lua-Spore/lua-spore-0.1.6.tar.gz',
+--     md5 = 'b7a5bc8b0212fe6d15731b859bf26b86',
+--     dir = 'lua-Spore-0.1.6',
 -- }
 description = {
     summary = "a generic ReST client",
@@ -42,6 +42,7 @@ build = {
     modules = {
         ['Spore']                               = 'src/Spore.lua',
         ['Spore.Core']                          = 'src/Spore/Core.lua',
+        ['Spore.GoogleDiscovery']               = 'src/Spore/GoogleDiscovery.lua',
         ['Spore.Middleware.Auth.AWS']           = 'src/Spore/Middleware/Auth/AWS.lua',
         ['Spore.Middleware.Auth.Basic']         = 'src/Spore/Middleware/Auth/Basic.lua',
         ['Spore.Middleware.Auth.Bearer']        = 'src/Spore/Middleware/Auth/Bearer.lua',
@@ -62,6 +63,9 @@ build = {
         ['Spore.Middleware.UserAgent']          = 'src/Spore/Middleware/UserAgent.lua',
         ['Spore.Protocols']                     = 'src/Spore/Protocols.lua',
         ['Spore.Request']                       = 'src/Spore/Request.lua',
+    },
+    install = {
+        bin = { 'src/discovery2spore' }
     },
     copy_directories = { 'doc', 'test' },
 }
