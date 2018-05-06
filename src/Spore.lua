@@ -23,7 +23,7 @@ local m = {}
 
 m.early_validate = true
 
-local version = '0.1.0'
+local version = '0.1.1'
 
 local function raises (response, reason)
     local ex = { response = response, reason = reason }
@@ -55,22 +55,24 @@ local function validate (caller, method, params, payload)
     if not method.unattended_params then
         local optional_params = method.optional_params or {}
         for param in pairs(params) do
-            local found = false
-            for i = 1, #required_params do
-                if param == required_params[i] then
-                    found = true
-                    break
-                end
-            end
-            if not found then
-                for i = 1, #optional_params do
-                    if param == optional_params[i] then
+            if not param:match'^oauth_' then
+                local found = false
+                for i = 1, #required_params do
+                    if param == required_params[i] then
                         found = true
                         break
                     end
                 end
+                if not found then
+                    for i = 1, #optional_params do
+                        if param == optional_params[i] then
+                            found = true
+                            break
+                        end
+                    end
+                end
+                assert(found, param .. " is not expected for method " .. caller)
             end
-            assert(found, param .. " is not expected for method " .. caller)
         end
     end
 end
@@ -96,7 +98,7 @@ local function wrap (self, name, method, args)
     end
 
     local base_url = url.parse(method.base_url)
-    local path_url = url.parse(method.path)
+    local path_url = url.parse(method.path) or {}
     local path_info = (base_url.path or '') .. (path_url.path or '')
     path_info = path_info:gsub('//', '/')
 
@@ -184,6 +186,7 @@ local function populate (obj, spec, opts)
         assert(type(v.headers or {}) == 'table', "headers of " .. k .. " is not an hash")
         assert(v.base_url, k .. ": base_url is missing")
         local uri = url.parse(v.base_url)
+        assert(uri, k .. ": base_url is invalid")
         assert(uri.host, k .. ": base_url without host")
         assert(uri.scheme, k .. ": base_url without scheme")
         if v.required_payload or v.optional_payload then
@@ -245,9 +248,10 @@ local function new_from_spec (...)
 end
 m.new_from_spec = new_from_spec
 
+m._NAME = ...
 m._VERSION = version
 m._DESCRIPTION = "lua-Spore : a generic ReST client"
-m._COPYRIGHT = "Copyright (c) 2010 Francois Perrad"
+m._COPYRIGHT = "Copyright (c) 2010-2011 Francois Perrad"
 return m
 --
 -- This library is licensed under the terms of the MIT/X11 license,

@@ -12,9 +12,12 @@ eg/term_ie.lua
 rockspec.in
 src/Spore.lua
 src/Spore/Core.lua
+src/Spore/Middleware/Auth/AWS.lua
 src/Spore/Middleware/Auth/Basic.lua
+src/Spore/Middleware/Auth/Bearer.lua
 src/Spore/Middleware/Auth/OAuth.lua
 src/Spore/Middleware/Cache.lua
+src/Spore/Middleware/DoNotTrack.lua
 src/Spore/Middleware/Format/JSON.lua
 src/Spore/Middleware/Format/XML.lua
 src/Spore/Middleware/Format/YAML.lua
@@ -41,8 +44,11 @@ test/13-logging.t
 test/14-redirection.t
 test/15-mock.t
 test/16-cache.t
+test/17-do-not-track.t
 test/21-auth_basic.t
 test/22-oauth.t
+test/23-aws.t
+test/24-bearer.t
 test/31-format_json.t
 test/32-format_yaml.t
 test/33-format_xml.t

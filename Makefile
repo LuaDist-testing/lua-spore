@@ -6,10 +6,13 @@ ifndef REV
   REV   := 1
 endif
 
-ifndef DESTDIR
-  DESTDIR := /usr/local
-endif
-LIBDIR  := $(DESTDIR)/share/lua/5.1
+LUAVER  := 5.1
+PREFIX  := /usr/local
+DPREFIX := $(DESTDIR)$(PREFIX)
+LIBDIR  := $(DPREFIX)/share/lua/$(LUAVER)
+
+all:
+	@echo "Nothing to build here, you can just make install"
 
 install:
 	mkdir -p $(LIBDIR)/Spore/Middleware/Auth
@@ -21,12 +24,15 @@ install:
 	cp src/Spore/Protocols.lua                      $(LIBDIR)/Spore
 	cp src/Spore/Request.lua                        $(LIBDIR)/Spore
 	cp src/Spore/Middleware/Cache.lua               $(LIBDIR)/Spore/Middleware
+	cp src/Spore/Middleware/DoNotTrack.lua          $(LIBDIR)/Spore/Middleware
 	cp src/Spore/Middleware/Logging.lua             $(LIBDIR)/Spore/Middleware
 	cp src/Spore/Middleware/Mock.lua                $(LIBDIR)/Spore/Middleware
 	cp src/Spore/Middleware/Redirection.lua         $(LIBDIR)/Spore/Middleware
 	cp src/Spore/Middleware/Runtime.lua             $(LIBDIR)/Spore/Middleware
 	cp src/Spore/Middleware/UserAgent.lua           $(LIBDIR)/Spore/Middleware
+	cp src/Spore/Middleware/Auth/AWS.lua            $(LIBDIR)/Spore/Middleware/Auth
 	cp src/Spore/Middleware/Auth/Basic.lua          $(LIBDIR)/Spore/Middleware/Auth
+	cp src/Spore/Middleware/Auth/Bearer.lua         $(LIBDIR)/Spore/Middleware/Auth
 	cp src/Spore/Middleware/Auth/OAuth.lua          $(LIBDIR)/Spore/Middleware/Auth
 	cp src/Spore/Middleware/Format/JSON.lua         $(LIBDIR)/Spore/Middleware/Format
 	cp src/Spore/Middleware/Format/XML.lua          $(LIBDIR)/Spore/Middleware/Format
@@ -110,6 +116,9 @@ export LUA_PATH=;;src/?.lua
 
 test:
 	prove --exec=$(LUA) ./test/*.t
+
+test_eg:
+	prove --exec=$(LUA) ./eg/*.lua
 
 coverage:
 	rm -f ./luacov.stats.out ./luacov.report.out

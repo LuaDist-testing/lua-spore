@@ -30,7 +30,23 @@ function m.new (env)
     })
 end
 
-local function escape5849(s)
+local function escape (s)
+    -- see RFC 3986
+    -- unreserved
+    return string.gsub(s, '[^-._~%w]', function(c)
+        return string.format('%%%02x', string.byte(c))
+    end)
+end
+
+local function escape_path (s)
+    -- see RFC 3986
+    -- unreserved + slash
+    return string.gsub(s, '[^-._~%w/]', function(c)
+        return string.format('%%%02x', string.byte(c))
+    end)
+end
+
+local function escape5849 (s)
     -- see RFC 5849, Section 3.6
     return string.gsub(s, '[^-._~%w]', function(c)
         return string.upper(string.format('%%%02x', string.byte(c)))
@@ -66,9 +82,8 @@ function m:finalize (oauth)
     for k, v in pairs(spore.params) do
         k = tostring(k)
         v = tostring(v)
-        local e = url.escape(v)
         local n
-        path_info, n = path_info:gsub(':' .. k, (e:gsub('%%', '%%%%')))
+        path_info, n = path_info:gsub(':' .. k, (escape_path(v):gsub('%%', '%%%%')))
         for kk, vv in pairs(form_data) do
             kk = tostring(kk)
             vv = tostring(vv)
@@ -98,7 +113,7 @@ function m:finalize (oauth)
                     query_vals[k] = escape5849(v)
                 end
             else
-                query[#query+1] = url.escape(k) .. '=' .. e
+                query[#query+1] = escape(k) .. '=' .. escape(v)
             end
         end
     end
@@ -129,7 +144,7 @@ function m:finalize (oauth)
         }
         for k, v in pairs(spore.params) do
             k = tostring(k)
-            if k:match'^oauth_' and not query_vals[k] then
+            if k ~= 'realm' and not query_vals[k] then
                 query_keys[#query_keys+1] = k
                 query_vals[k] = escape5849(tostring(v))
             end
@@ -156,7 +171,7 @@ end
 
 return m
 --
--- Copyright (c) 2010 Francois Perrad
+-- Copyright (c) 2010-2011 Francois Perrad
 --
 -- This library is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.

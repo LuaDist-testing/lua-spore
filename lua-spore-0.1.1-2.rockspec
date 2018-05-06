@@ -1,17 +1,17 @@
 -- This file was automatically generated for the LuaDist project.
 
 package = 'lua-Spore'
-version = '0.1.0-2'
+version = '0.1.1-2'
 -- LuaDist source
 source = {
-  tag = "0.1.0-2",
+  tag = "0.1.1-2",
   url = "git://github.com/LuaDist-testing/lua-spore.git"
 }
 -- Original source
 -- source = {
---     url = 'http://cloud.github.com/downloads/fperrad/lua-Spore/lua-spore-0.1.0.tar.gz',
---     md5 = '05d4ef7c6bd3dc24af6e28560cc65632',
---     dir = 'lua-Spore-0.1.0',
+--     url = 'http://luaforge.net/frs/download.php/4822/lua-spore-0.1.1.tar.gz',
+--     md5 = '91be7ccbdba044175d146e1b8e3047bd',
+--     dir = 'lua-Spore-0.1.1',
 -- }
 description = {
     summary = "a generic ReST client",
@@ -42,9 +42,12 @@ build = {
     modules = {
         ['Spore']                               = 'src/Spore.lua',
         ['Spore.Core']                          = 'src/Spore/Core.lua',
+        ['Spore.Middleware.Auth.AWS']           = 'src/Spore/Middleware/Auth/AWS.lua',
         ['Spore.Middleware.Auth.Basic']         = 'src/Spore/Middleware/Auth/Basic.lua',
+        ['Spore.Middleware.Auth.Bearer']        = 'src/Spore/Middleware/Auth/Bearer.lua',
         ['Spore.Middleware.Auth.OAuth']         = 'src/Spore/Middleware/Auth/OAuth.lua',
         ['Spore.Middleware.Cache']              = 'src/Spore/Middleware/Cache.lua',
+        ['Spore.Middleware.DoNotTrack']         = 'src/Spore/Middleware/DoNotTrack.lua',
         ['Spore.Middleware.Format.JSON']        = 'src/Spore/Middleware/Format/JSON.lua',
         ['Spore.Middleware.Format.XML']         = 'src/Spore/Middleware/Format/XML.lua',
         ['Spore.Middleware.Format.YAML']        = 'src/Spore/Middleware/Format/YAML.lua',

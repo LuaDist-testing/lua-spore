@@ -49,7 +49,9 @@
     </li>
     <li><strong>module <code>S.Middleware</code></strong>
       <ul>
+        <li><a href="middleware.html#aws">Auth.AWS</a></li>
         <li><a href="middleware.html#basic">Auth.Basic</a></li>
+        <li><a href="middleware.html#bearer">Auth.Bearer</a></li>
         <li><a href="middleware.html#oauth">Auth.OAuth</a></li>
         <li><a href="middleware.html#json">Format.JSON</a></li>
         <li><a href="middleware.html#xml">Format.XML</a></li>
@@ -58,6 +60,7 @@
         <li><a href="middleware.html#force">Parameter.Force</a></li>
         <li><a href="middleware.html#proxy">Proxy.Basic</a></li>
         <li><a href="middleware.html#cache">Cache</a></li>
+        <li><a href="middleware.html#dnt">DoNotTrack</a></li>
         <li><a href="middleware.html#logging">Logging</a></li>
         <li><a href="middleware.html#mock">Mock</a></li>
         <li><a href="middleware.html#redirection">Redirection</a></li>
@@ -90,12 +93,43 @@ end
 return m
 </pre>
 
+<h2><a name="aws"></a>Spore.Middleware.Auth.AWS</h2>
+
+<p>This middleware implements the authentication for Amazon Web Services,
+see this <a href="http://docs.amazonwebservices.com/AmazonS3/latest/dev/index.html?RESTAuthentication.html">ref doc</a>.</p>
+
+<p>This middleware requires <a href="http://luacrypto.luaforge.net/">luacrypto</a>.</p>
+
+<p>This middleware should be loaded as the last middleware,
+because it directly sends the request.</p>
+
+<pre class="example">
+local client = require 'Spore'.new_from_spec('amazons3.json', {
+    base_url = 'http://s3-eu-west-1.amazonaws.com',  -- the default is http://s3.amazonaws.com
+})
+client:enable('Parameter.Default', {
+    bucket = 'mybucket',
+})
+client:enable('Auth.AWS', {
+    aws_access_key = '0PN5J17HBGZHT7JJ3X82',
+    aws_secret_key = 'uV3F3YluFJax1cknvbcGwgjvx4QpvB+leU8dUj2o',
+})
+</pre>
+
 <h2><a name="basic"></a>Spore.Middleware.Auth.Basic</h2>
 
 <pre class="example">
 client:enable('Auth.Basic', {
     username = 'schacon/token',
     password = '6ef8395fecf207165f1a82178ae1b984',
+})
+</pre>
+
+<h2><a name="bearer"></a>Spore.Middleware.Auth.Bearer</h2>
+
+<pre class="example">
+client:enable('Auth.Bearer', {
+    bearer_token = 'vF9dft4qmT',
 })
 </pre>
 
@@ -187,6 +221,12 @@ client:enable 'Cache'
 </pre>
 
 <p>Note: This middleware uses only URL as unique key.</p>
+
+<h2><a name="dnt"></a>Spore.Middleware.DoNotTrack</h2>
+
+<pre class="example">
+client:enable 'DoNotTrack'
+</pre>
 
 <h2><a name="logging"></a>Spore.Middleware.Logging</h2>
 

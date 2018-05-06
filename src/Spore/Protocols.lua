@@ -39,11 +39,11 @@ local function slurp (name)
         f:close()
         return content
     else
-        local res = request{
+        local res = m.request{
             env = {
                 spore = {
                     url_scheme = uri.scheme,
-                    debug = debug,
+                    debug = require'Spore'.debug,
                 },
             },
             method = 'GET',
@@ -118,11 +118,18 @@ local function request (req)
         req.headers['content-type'] = req.headers['content-type'] or 'application/x-www-form-urlencoded'
     end
 
+    if req.method == 'POST' and not req.headers['content-length'] then
+        req.headers['content-length'] = 0
+    end
+
     local t = {}
     req.sink = ltn12.sink.table(t)
 
     if spore.debug then
         spore.debug:write(req.method, " ", req.url, "\n")
+        for k, v in pairs(req.headers) do
+            spore.debug:write(k, ": ", v, "\n")
+        end
     end
     local r, status, headers, line = prot.request(req)
     if spore.debug then
@@ -138,6 +145,8 @@ end
 m.request = request
 
 return m
+--
+-- Copyright (c) 2010-2011 Francois Perrad
 --
 -- This library is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
