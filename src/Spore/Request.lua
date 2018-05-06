@@ -55,11 +55,15 @@ end
 m.escape5849 = escape5849
 
 function m:finalize (oauth)
+    if self.url then
+        return
+    end
     local env = self.env
     local spore = env.spore
     if not require 'Spore'.early_validate then
         require 'Spore'.validate(spore.caller, spore.method, spore.params, spore.payload)
     end
+    local base_string_needed = oauth and spore.params.oauth_signature_method ~= 'PLAINTEXT'
     local path_info = env.PATH_INFO
     local query_string = env.QUERY_STRING
     local form_data = {}
@@ -69,17 +73,25 @@ function m:finalize (oauth)
     local headers = {}
     for k, v in pairs(spore.headers or {}) do
         headers[tostring(k):lower()] = tostring(v)
-     end
+    end
     local payload = spore.payload
     local query, query_keys, query_vals = {}, {}, {}
     if query_string then
-        if oauth then
-            for k, v in query_string:gmatch '([^=]+)=([^&]+)&?' do
+        query[1] = query_string
+        if base_string_needed then
+            for k, v in query_string:gmatch '([^=]+)=([^&]*)&?' do
                 query_keys[#query_keys+1] = k
                 query_vals[k] = v
             end
-        else
-            query[1] = query_string
+        end
+    end
+    if base_string_needed and payload then
+        local ct = self.headers['content-type']
+        if not ct or ct == 'application/x-www-form-urlencoded' then
+            for k, v in payload:gmatch '([^=&]+)=?([^&]*)&?' do
+                query_keys[#query_keys+1] = k
+                query_vals[k] = v:gsub('+', '%%20')
+            end
         end
     end
     local form = {}
@@ -90,7 +102,7 @@ function m:finalize (oauth)
         path_info, n = path_info:gsub(':' .. k, (escape_path(v):gsub('%%', '%%%%')))
         for kk, vv in pairs(form_data) do
             local nn
-            vv, nn = vv:gsub(':' .. k, v)
+            vv, nn = vv:gsub(':' .. k, (v:gsub('%%', '%%%%')))
             if nn > 0 then
                 form_data[kk] = vv
                 form[kk] = vv
@@ -99,7 +111,10 @@ function m:finalize (oauth)
         end
         for kk, vv in pairs(headers) do
             local nn
-            vv, nn = vv:gsub(':' .. k, v)
+            if oauth and k:match'^oauth_' then
+                v = escape(v)
+            end
+            vv, nn = vv:gsub(':' .. k, (v:gsub('%%', '%%%%')))
             if nn > 0 then
                 headers[kk] = vv
                 self.headers[kk] = vv
@@ -107,22 +122,11 @@ function m:finalize (oauth)
             end
         end
         if n == 0 then
-            if oauth then
-                if not k:match'^oauth_' or payload ~= '@oauth' then
-                    query_keys[#query_keys+1] = escape5849(k)
-                    query_vals[k] = escape5849(v)
-                end
-            else
-                query[#query+1] = escape(k) .. '=' .. escape(v)
+            query[#query+1] = escape(k) .. '=' .. escape(v)
+            if base_string_needed then
+                query_keys[#query_keys+1] = escape5849(k)
+                query_vals[k] = escape5849(v)
             end
-        end
-    end
-    if oauth then
-        tsort(query_keys)
-        for i = 1, #query_keys do
-            local k = query_keys[i]
-            local v = query_vals[k]
-            query[#query+1] = k .. '=' .. v
         end
     end
     if #query > 0 then
@@ -134,11 +138,19 @@ function m:finalize (oauth)
         spore.form_data = form
     end
     self.method = env.REQUEST_METHOD
-    if oauth then
+    if base_string_needed then
+        local scheme = env.spore.url_scheme
+        local port = env.SERVER_PORT
+        if port == '80' and scheme == 'http' then
+            port = nil
+        end
+        if port == '443' and scheme == 'https' then
+            port = nil
+        end
         local base_url = url.build {
-            scheme  = env.spore.url_scheme,
+            scheme  = scheme,
             host    = env.SERVER_NAME,
-            port    = env.SERVER_PORT,
+            port    = port,
             path    = path_info,
             -- no query
         }

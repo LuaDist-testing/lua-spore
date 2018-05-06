@@ -4,8 +4,8 @@
 
 local error = error
 local tostring = tostring
-local math = require 'math'
-local os = require 'os'
+local random = require 'math'.random
+local time = require 'os'.time
 local crypto = require 'crypto'.hmac
 local mime = require 'mime'
 local escape = require 'Spore.Request'.escape5849
@@ -21,12 +21,12 @@ local m = {}
         RFC 5849 : The OAuth 1.0 Protocol
 --]]
 
-local function generate_timestamp()
-    return tostring(os.time())
+function m.generate_timestamp()
+    return tostring(time())
 end
 
-local function generate_nonce()
-    return crypto.digest('sha1', tostring(math.random()) .. 'random' .. tostring(os.time()), 'keyyyy')
+function m.generate_nonce()
+    return crypto.digest('sha1', tostring(random()) .. 'random' .. tostring(time()), 'keyyyy')
 end
 
 function m:call (req)
@@ -36,22 +36,39 @@ function m:call (req)
         local spore = env.spore
         local params = spore.params
         params.oauth_consumer_key = self.oauth_consumer_key
-        params.oauth_nonce = generate_nonce()
         params.oauth_signature_method = self.oauth_signature_method or 'HMAC-SHA1'
-        params.oauth_timestamp = generate_timestamp()
-        params.oauth_version = '1.0'
-        if self.oauth_token then        -- access token
-            params.oauth_token = self.oauth_token
-            params.oauth_verifier = self.oauth_verifier
-        else                            -- request token
-            params.oauth_callback = self.oauth_callback or 'oob'        -- out-of-band
+        local auth = 'OAuth'
+        if self.realm then
+            auth = auth .. ' realm="' .. tostring(self.realm) .. '",'
         end
+        auth = auth .. [[ oauth_consumer_key=":oauth_consumer_key", oauth_signature_method=":oauth_signature_method", oauth_signature=":oauth_signature"]]
+        if params.oauth_signature_method ~= 'PLAINTEXT' then
+            params.oauth_timestamp = m.generate_timestamp()
+            params.oauth_nonce = m.generate_nonce()
+            auth = auth .. [[, oauth_timestamp=":oauth_timestamp", oauth_nonce=":oauth_nonce"]]
+        end
+        if not self.oauth_token then    -- 1) request token
+            params.oauth_callback = self.oauth_callback or 'oob'        -- out-of-band
+            auth = auth .. [[, oauth_callback=":oauth_callback"]]
+        else
+            params.oauth_token = self.oauth_token
+            if self.oauth_verifier then -- 2) access token
+                params.oauth_verifier = self.oauth_verifier
+                auth = auth .. [[, oauth_token=":oauth_token", oauth_verifier=":oauth_verifier"]]
+            else                        -- 3) client requests
+                auth = auth .. [[, oauth_token=":oauth_token"]]
+            end
+        end
+        if not spore.headers then
+            spore.headers = {}
+        end
+        spore.headers['authorization'] = auth
         req:finalize(true)
 
         local signature_key = escape(self.oauth_consumer_secret) .. '&' .. escape(self.oauth_token_secret or '')
         local oauth_signature
         if params.oauth_signature_method == 'PLAINTEXT' then
-            oauth_signature = escape(escape(signature_key))
+            oauth_signature = escape(signature_key)
         else
             if params.oauth_signature_method == 'HMAC-SHA1' then
                 local hmac_binary = crypto.digest('sha1', req.oauth_signature_base_string, signature_key, true)
@@ -62,28 +79,8 @@ function m:call (req)
             end
         end
 
-        local headers = req.headers
-        local authorization = headers['authorization']
-        if authorization then
-            headers['authorization'] = authorization:gsub(':oauth_signature', (oauth_signature:gsub('%%', '%%%%')))
-        else
-            local www_authenticate = headers['www-authenticate']
-            if www_authenticate then
-                headers['www-authenticate'] = www_authenticate:gsub(':oauth_signature', (oauth_signature:gsub('%%', '%%%%')))
-            else
-                if spore.payload == '@oauth' then
-                    spore.payload = 'oauth_consumer_key='     .. params.oauth_consumer_key
-                                .. '&oauth_nonce='            .. params.oauth_nonce
-                                .. '&oauth_signature_method=' .. params.oauth_signature_method
-                                .. '&oauth_timestamp='        .. params.oauth_timestamp
-                                .. '&oauth_token='            .. params.oauth_token
-                                .. '&oauth_version='          .. params.oauth_version
-                                .. '&oauth_signature='        .. oauth_signature
-                else
-                    req.url = req.url .. '&oauth_signature=' .. oauth_signature
-                end
-            end
-        end
+        local auth = req.headers['authorization']
+        req.headers['authorization'] = auth:gsub(':oauth_signature', (oauth_signature:gsub('%%', '%%%%')))
         return request(req)
     end
 end

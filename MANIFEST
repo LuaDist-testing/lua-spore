@@ -8,13 +8,13 @@ doc/index.html
 doc/middleware.html
 doc/spore.html
 eg/echo_lab_madgex_com.lua
-eg/term_ie.lua
 rockspec.in
 src/Spore.lua
 src/Spore/Core.lua
 src/Spore/Middleware/Auth/AWS.lua
 src/Spore/Middleware/Auth/Basic.lua
 src/Spore/Middleware/Auth/Bearer.lua
+src/Spore/Middleware/Auth/Digest.lua
 src/Spore/Middleware/Auth/OAuth.lua
 src/Spore/Middleware/Cache.lua
 src/Spore/Middleware/DoNotTrack.lua
@@ -49,6 +49,7 @@ test/21-auth_basic.t
 test/22-oauth.t
 test/23-aws.t
 test/24-bearer.t
+test/25-auth_digest.t
 test/31-format_json.t
 test/32-format_yaml.t
 test/33-format_to_xml.t
