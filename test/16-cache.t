@@ -1,16 +1,19 @@
 #!/usr/bin/env lua
 
-local Spore = require 'Spore'
-
 require 'Test.More'
 
 plan(8)
 
 local i = 0
-require 'Spore.Protocols'.request = function (req)
-    i = i + 1
-    return { body = tostring(i) }
-end -- mock
+package.loaded['socket.http'] = {
+    request = function (req)
+        i = i + 1
+        req.sink(tostring(i))
+        return req, 200, {}
+    end -- mock
+}
+
+local Spore = require 'Spore'
 
 if not require_ok 'Spore.Middleware.Cache' then
     skip_rest "no Spore.Middleware.Cache"
@@ -19,7 +22,7 @@ end
 
 local client = Spore.new_from_spec './test/api.json'
 
-r = client:get_info()
+local r = client:get_info()
 is( r.body, '1' )
 r = client:get_info()
 is( r.body, '2', "not cached" )

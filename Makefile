@@ -111,10 +111,8 @@ dist: $(TARBALL)
 rockspec: $(TARBALL)
 	perl -e '$(rockspec_pl)' rockspec.in > rockspec/lua-spore-$(VERSION)-$(REV).rockspec
 
-install-rock: clean dist rockspec
-	perl -pe 's{http://cloud.github.com/downloads/fperrad/lua-Spore/}{};' \
-	    rockspec/lua-spore-$(VERSION)-$(REV).rockspec > lua-spore-$(VERSION)-$(REV).rockspec
-	luarocks install lua-spore-$(VERSION)-$(REV).rockspec
+rock:
+	luarocks pack rockspec/lua-spore-$(VERSION)-$(REV).rockspec
 
 check: test
 
@@ -126,10 +124,22 @@ test:
 test_eg:
 	prove --exec=$(LUA) ./eg/*.lua
 
+luacheck:
+	luacheck --std=max --codes src --ignore 212 --ignore 213 --ignore 512
+	luacheck --std=min --codes src/discovery2spore
+	luacheck --std=min --codes src/wadl2spore
+	luacheck --std=min --codes eg
+	luacheck --std=min --config .test.luacheckrc test/*.t
+
 coverage:
 	rm -f ./luacov.stats.out ./luacov.report.out
 	-prove --exec="$(LUA) -lluacov" ./test/*.t
 	luacov
+
+coveralls:
+	rm -f ./luacov.stats.out ./luacov.report.out
+	-prove --exec="$(LUA) -lluacov" ./test/*.t
+	luacov-coveralls -e ^/usr -e %.t$
 
 README.html: README.md
 	Markdown.pl README.md > README.html

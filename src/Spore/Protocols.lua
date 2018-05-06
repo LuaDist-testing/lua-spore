@@ -7,6 +7,7 @@ local assert = assert
 local pairs = pairs
 local pcall = pcall
 local require = require
+local type = type
 local unpack = require 'table'.unpack or unpack
 local io = require 'io'
 local math = require 'math'
@@ -109,6 +110,9 @@ local function request (req)
 
     local payload = spore.payload
     if payload then
+        if type(payload) == 'table' then
+            payload = require'json'.encode(payload)
+        end
         req.source = ltn12.source.string(payload)
         req.headers['content-length'] = payload:len()
         req.headers['content-type'] = req.headers['content-type'] or 'application/x-www-form-urlencoded'
@@ -127,7 +131,7 @@ local function request (req)
             spore.debug:write(k, ": ", v, "\n")
         end
     end
-    local r, status, headers, line = prot.request(req)
+    local _, status, headers, line = prot.request(req)
     if spore.debug then
         spore.debug:write(line or status, "\n")
     end

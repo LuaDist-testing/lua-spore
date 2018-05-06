@@ -6,6 +6,7 @@ README.md
 dist.info
 doc/Makefile
 doc/discovery.html
+doc/doc.css
 doc/index.html
 doc/middleware.html
 doc/spore.html

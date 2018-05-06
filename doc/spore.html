@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>Module Spore</title>
-    <link rel="stylesheet" href="http://www.keplerproject.org/doc.css" type="text/css"/>
+    <link rel="stylesheet" href="doc.css" type="text/css"/>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta http-equiv="Author" content="Fran&ccedil;ois Perrad"/>
   <meta http-equiv="Language" content="en"/>
@@ -82,7 +82,7 @@
         <li><a href="wadl.html#examples">Examples</a></li>
       </ul>
     </li>
-    <li><a href="http://luaforge.net/projects/lua-spore/">Project</a>
+    <li><a href="http://fperrad.github.io/lua-Spore/">Project</a>
       <ul>
         <li><a href="http://github.com/fperrad/lua-Spore/">Git</a></li>
         <li><script type="text/javascript" src="http://www.ohloh.net/p/485769/widgets/project_thin_badge.js"></script></li>
@@ -274,7 +274,7 @@ print(res.body.user.name)       --> Scott Chacon
 
 <h3>GitHub via https</h3>
 
-<p>The HTTPS protocol requires <a href="http://luasec.luaforge.net/">LuaSec</a>.</p>
+<p>The HTTPS protocol requires <a href="http://github.com/brunoos/luasec">LuaSec</a>.</p>
 
 <pre class="example">
 local Spore = require 'Spore'
@@ -381,13 +381,14 @@ assert(r.body.ok)
 print("id", r.body.id)
 print("rev", r.body.rev)
 
+local slurp = require 'Spore.Protocols'.slurp
 local r = couchdb:add_attachment{
     db = 'albums',
     id = '6e1295ed6c29495e54cc05947f18c8af',
     rev = rev2,
     file = 'api.png',
     content_type = 'image/png',
-    payload = '@api.png',
+    payload = slurp'api.png',
 }
 assert(r.body.ok)
 print("id", r.body.id)

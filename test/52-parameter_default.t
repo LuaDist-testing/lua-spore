@@ -4,13 +4,14 @@ require 'Test.More'
 
 plan(9)
 
+package.loaded['socket.http'] = {
+    request = function (req) return req, 200 end -- mock
+}
+
 if not require_ok 'Spore.Middleware.Parameter.Default' then
     skip_rest "no Spore.Middleware.Parameter.Default"
     os.exit()
 end
-
-local status = 200
-require 'Spore.Protocols'.request = function (req) return { request = req, status = status } end -- mock
 
 local Spore = require 'Spore'
 local client = Spore.new_from_spec('./test/api.json', {})
@@ -27,11 +28,11 @@ is( r.request.env.spore.params.user, 'John' )
 is( r.request.env.spore.params.border, 0 )
 is( r.request.env.spore.params.dummy, nil )
 
-local r = client:get_info{ user = 'Joe', border = 1 }
+r = client:get_info{ user = 'Joe', border = 1 }
 is( r.request.env.spore.params.user, 'Joe' )
 is( r.request.env.spore.params.border, 1 )
 
-local r = client:get_user_info{ payload = 'opaque data' }
+r = client:get_user_info{ payload = 'opaque data' }
 is( r.request.env.spore.params.user, 'John' )
 is( r.request.env.spore.params.border, 0 )
 

@@ -10,7 +10,6 @@
 local assert = assert
 local ipairs = ipairs
 local tonumber = tonumber
-local type = type
 local checktype = require 'Spore'.checktype
 local new_from_lua = require 'Spore'.new_from_lua
 local slurp = require 'Spore.Protocols'.slurp
@@ -65,7 +64,7 @@ local function convert (doc)
     end -- get_params
 
     local function populate (methods, path, required_prm, optional_prm)
-        local path = path and convert_uri_template(path)
+        path = path and convert_uri_template(path)
         for _, meth in ipairs(methods or {}) do
             local methname = assert(meth.id, "method name missing")
             local method = meth.name
@@ -98,7 +97,7 @@ local function convert (doc)
 
     local function walk (resource, required_prm, optional_prm)
         for _, _resource in ipairs(resource or {}) do
-            local required_params, optional_params = get_params(params, required_prm, optional_prm)
+            local required_params, optional_params = get_params({}, required_prm, optional_prm)
             walk(_resource.resource, required_params, optional_params)
             populate(_resource.method, _resource.path, required_params, optional_params)
         end
