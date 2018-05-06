@@ -1,17 +1,17 @@
 -- This file was automatically generated for the LuaDist project.
 
 package = 'lua-Spore'
-version = '0.2.1-1'
+version = '0.3.0-1'
 -- LuaDist source
 source = {
-  tag = "0.2.1-1",
+  tag = "0.3.0-1",
   url = "git://github.com/LuaDist-testing/lua-spore.git"
 }
 -- Original source
 -- source = {
---     url = 'http://cloud.github.com/downloads/fperrad/lua-Spore/lua-spore-0.2.1.tar.gz',
---     md5 = 'a78fcc331d1d270a090af1035ef6c085',
---     dir = 'lua-Spore-0.2.1',
+--     url = 'http://sites.google.com/site/fperrad/lua-spore-0.3.0.tar.gz',
+--     md5 = '1581f91142de10787f86187794fe0bfe',
+--     dir = 'lua-Spore-0.3.0',
 -- }
 description = {
     summary = "a generic ReST client",
@@ -65,9 +65,14 @@ build = {
         ['Spore.Middleware.UserAgent']          = 'src/Spore/Middleware/UserAgent.lua',
         ['Spore.Protocols']                     = 'src/Spore/Protocols.lua',
         ['Spore.Request']                       = 'src/Spore/Request.lua',
+        ['Spore.WADL']                          = 'src/Spore/WADL.lua',
+        ['Spore.XML']                           = 'src/Spore/XML.lua',
     },
     install = {
-        bin = { 'src/discovery2spore' }
+        bin = {
+            'src/discovery2spore',
+            'src/wadl2spore',
+        }
     },
     copy_directories = { 'doc', 'test' },
 }

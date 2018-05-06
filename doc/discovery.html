@@ -8,7 +8,7 @@
   <meta http-equiv="Author" content="Fran&ccedil;ois Perrad"/>
   <meta http-equiv="Language" content="en"/>
   <meta http-equiv="Description" content="Module Spore.GoogleDiscovery"/>
-  <meta http-equiv="Keywords" content="lua, Spore, ReST, ReSTapi, ReSTful, new_from_discovery, google, discovery"/>
+  <meta http-equiv="Keywords" content="lua, SPORE, ReST, ReSTapi, ReSTful, new_from_discovery, google, discovery"/>
 </head>
 
 <body>
@@ -76,6 +76,12 @@
         <li><a href="discovery.html#examples">Examples</a></li>
       </ul>
     </li>
+    <li><a href="wadl.html">module <code>S.WADL</code></a>
+      <ul>
+        <li><a href="wadl.html#reference">Reference</a></li>
+        <li><a href="wadl.html#examples">Examples</a></li>
+      </ul>
+    </li>
     <li><a href="http://luaforge.net/projects/lua-spore/">Project</a>
       <ul>
         <li><a href="http://github.com/fperrad/lua-Spore/">Git</a></li>
@@ -117,14 +123,14 @@ local client = discovery.new_from_discovery { api = 'urlshortener', version = 'v
 <h4><code>convert( gdoc )</code></h4>
 
 <p>Converts a <a href="http://code.google.com/apis/discovery/">Google Discovery Document</a>
-into a Spore Specification (both are represented by a <code>table</code>).</p>
+into a SPORE specification (both are represented by a <code>table</code>).</p>
 
 <h3>Utilities</h3>
 
 <h4><code>discovery2spore url</code></h4>
 
-<p>Converts a Google Discovery Document into a Spore Specification.
-By this way, the Spore specification could be edited/modified before use.</p>
+<p>Converts a Google Discovery Document into a SPORE specification.
+By this way, the SPORE specification could be edited/modified before use.</p>
 
 <pre class="example">
 $ discovery2spore https://www.googleapis.com/discovery/v1/apis/urlshortener/v1/rest > urlshortener.json

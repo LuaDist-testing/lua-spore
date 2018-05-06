@@ -32,7 +32,7 @@ type_ok( req.finalize, 'function' )
 is( req.url, nil )
 is( req.method, nil )
 
-env.PATH_INFO = '/restapi/usr:prm1/show/:prm2'
+env.PATH_INFO = '/restapi/usr{prm1}/show/{prm2}'
 env.QUERY_STRING = nil
 req:finalize()
 is( req.method, 'PET', "method" )
@@ -42,7 +42,7 @@ is( env.QUERY_STRING, 'prm3=Value%20Z' )
 req.headers.auth = nil
 req.url = nil
 
-env.PATH_INFO = '/restapi/:prm3/show'
+env.PATH_INFO = '/restapi/{prm3}/show'
 env.QUERY_STRING = nil
 env.REQUEST_METHOD = 'TEP'
 req:finalize()
@@ -54,7 +54,7 @@ like( env.QUERY_STRING, '&?prm2=value2&?' )
 req.headers.auth = nil
 req.url = nil
 
-env.PATH_INFO = '/restapi/usr:prm1/show/:prm2'
+env.PATH_INFO = '/restapi/usr{prm1}/show/{prm2}'
 env.QUERY_STRING = nil
 env.spore.params.prm3 = nil
 req:finalize()
@@ -63,7 +63,7 @@ is( env.PATH_INFO, '/restapi/usr1/show/value2' )
 is( env.QUERY_STRING, nil )
 req.url = nil
 
-env.PATH_INFO = '/restapi/usr:prm1/show/:prm2'
+env.PATH_INFO = '/restapi/usr{prm1}/show/{prm2}'
 env.QUERY_STRING = nil
 env.spore.params.prm2 = 'path2/value2'
 req:finalize()
@@ -87,10 +87,10 @@ env.PATH_INFO = '/restapi/path'
 env.QUERY_STRING = nil
 env.spore.params.prm3 = "Value Z"
 env.spore.form_data = {
-    form1 = 'f(:prm1)',
-    form2 = 'g(:prm2)',
-    form3 = 'h(:prm3)',
-    form7 = 'r(:prm7)',
+    form1 = 'f({prm1})',
+    form2 = 'g({prm2})',
+    form3 = 'h({prm3})',
+    form7 = 'r({prm7})',
 }
 req:finalize()
 is( req.url, 'prot://services.org:9999/restapi/path', "url" )
@@ -105,10 +105,10 @@ req.url = nil
 env.QUERY_STRING = nil
 env.spore.form_data = nil
 env.spore.headers = {
-    head1 = 'f(:prm1)',
-    Head2 = 'g(:prm2); :prm1',
-    HeaD3 = 'h(:prm3)',
-    HEAD7 = 'r(:prm7)',
+    head1 = 'f({prm1})',
+    Head2 = 'g({prm2}); {prm1}',
+    HeaD3 = 'h({prm3})',
+    HEAD7 = 'r({prm7})',
 }
 req:finalize()
 is( req.url, 'prot://services.org:9999/restapi/path', "url" )

@@ -13,6 +13,7 @@ local url = require 'socket.url'
 
 _ENV = nil
 local m = {}
+local mt = { __index = m }
 
 m.redirect = false
 
@@ -24,9 +25,7 @@ function m.new (env)
             ['user-agent'] = env.HTTP_USER_AGENT,
         },
     }
-    return setmetatable(obj, {
-        __index = m,
-    })
+    return setmetatable(obj, mt)
 end
 
 local function escape (s)
@@ -47,11 +46,21 @@ local function escape_path (s)
 end
 
 function m:finalize (oauth)
+    local function gsub2 (s, patt1, patt2, repl)
+        repl = repl:gsub('%%', '%%%%')
+        local r, n = s:gsub(patt1, repl)
+        if n == 0 then
+            r, n = s:gsub(patt2, repl)
+        end
+        return r, n
+    end -- gsub2
+
     if self.url then
         return
     end
     local env = self.env
     local spore = env.spore
+    local payload = spore.method.payload or {}
     if not require 'Spore'.early_validate then
         require 'Spore'.validate(spore.caller, spore.method, spore.params, spore.payload)
     end
@@ -73,11 +82,13 @@ function m:finalize (oauth)
     for k, v in pairs(spore.params) do
         k = tostring(k)
         v = tostring(v)
+        local patt = ':' .. k
+        local patt6570 = '{' .. k .. '}'        -- see RFC 6570
         local n
-        path_info, n = path_info:gsub(':' .. k, (escape_path(v):gsub('%%', '%%%%')))
+        path_info, n = gsub2(path_info, patt, patt6570, escape_path(v))
         for kk, vv in pairs(form_data) do
             local nn
-            vv, nn = vv:gsub(':' .. k, (v:gsub('%%', '%%%%')))
+            vv, nn = gsub2(vv, patt, patt6570, v)
             if nn > 0 then
                 form_data[kk] = vv
                 form[kk] = vv
@@ -86,10 +97,15 @@ function m:finalize (oauth)
         end
         for kk, vv in pairs(headers) do
             local nn
-            vv, nn = vv:gsub(':' .. k, (v:gsub('%%', '%%%%')))
+            vv, nn = gsub2(vv, patt, patt6570, v)
             if nn > 0 then
                 headers[kk] = vv
                 self.headers[kk] = vv
+                n = n + 1
+            end
+        end
+        for i = 1, #payload do
+            if k == payload[i] then
                 n = n + 1
             end
         end
@@ -117,7 +133,7 @@ end
 
 return m
 --
--- Copyright (c) 2010-2011 Francois Perrad
+-- Copyright (c) 2010-2013 Francois Perrad
 --
 -- This library is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.

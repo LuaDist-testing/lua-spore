@@ -1,5 +1,17 @@
 Revision history for lua-Spore
 
+0.3.0  Sat May 25 10:30:00 2013
+	- SPORE 1.1 : add compatibility with URI Template (RFC 6570)
+	- SPORE 1.1 : handle parameter 'payload' from specification
+	- use WADL document as Spore specification
+		LIMITATION: cross-references are not supported
+	- add wadl2spore utility
+	INCOMPATIBILITY (see http://github.com/fperrad/lua-Spore/issues/12)
+		cli:meth{ payload = '@filename' } is no longer supported,
+		and could be rewritten like this :
+		    local slurp = require 'Spore.Protocols'.slurp
+		    cli:meth{ payload = slurp'filename' }
+
 0.2.1  Sun Sep 16 11:30:00 2012
 	- add middleware Auth.DataPublica
 	- refactor tests for LuaJIT

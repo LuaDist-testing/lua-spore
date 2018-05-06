@@ -23,7 +23,7 @@ local m = {}
 
 m.early_validate = true
 
-local version = '0.2.1'
+local version = '0.3.0'
 
 local function raises (response, reason)
     local ex = { response = response, reason = reason }
@@ -43,7 +43,9 @@ local function validate (caller, method, params, payload)
         assert(payload, "payload is required for method " .. caller)
     end
     if payload then
-        assert(method.required_payload or method.optional_payload, "payload is not expected for method " .. caller)
+        assert(method.required_payload
+            or method.optional_payload
+            or method.payload, "payload is not expected for method " .. caller)
     end
 
     local required_params = method.required_params or {}
@@ -93,6 +95,13 @@ local function wrap (self, name, method, args)
     local payload = params.spore_payload or params.payload
     params.spore_payload = nil
     params.payload = nil
+    if method.payload then
+        payload = {}
+        for i = 1, #method.payload do
+            local v = method.payload[i]
+            payload[v] = params[v]
+        end
+    end
     if m.early_validate then
         validate(name, method, params, payload)
     end
@@ -154,12 +163,12 @@ local function wrap (self, name, method, args)
     return response
 end
 
+local mt = {
+    __index = core,
+}
 local function new ()
     local obj = {
         middlewares = {}
-    }
-    local mt = {
-        __index = core,
     }
     return setmetatable(obj, mt)
 end
@@ -182,6 +191,7 @@ local function populate (obj, spec, opts)
         assert(type(v.expected_status or {}) == 'table', "expected_status of " .. k .. " is not an array")
         assert(type(v.required_params or {}) == 'table', "required_params of " .. k .. " is not an array")
         assert(type(v.optional_params or {}) == 'table', "optional_params of " .. k .. " is not an array")
+        assert(type(v.payload or {}) == 'table', "payload of " .. k .. " is not an array")
         assert(type(v['form-data'] or {}) == 'table', "form-data of " .. k .. " is not an hash")
         assert(type(v.headers or {}) == 'table', "headers of " .. k .. " is not an hash")
         assert(v.base_url, k .. ": base_url is missing")
@@ -191,6 +201,7 @@ local function populate (obj, spec, opts)
         assert(uri.scheme, k .. ": base_url without scheme")
         if v.required_payload or v.optional_payload then
             assert(not v['form-data'], "payload and form-data are exclusive")
+            assert(not v.payload, "payload and required_payload|optional_payload are exclusive")
         end
         obj[k] =  function (self, args)
                       return wrap(self, k, v, args)
@@ -253,7 +264,7 @@ m.new_from_spec = new_from_spec
 m._NAME = ...
 m._VERSION = version
 m._DESCRIPTION = "lua-Spore : a generic ReST client"
-m._COPYRIGHT = "Copyright (c) 2010-2012 Francois Perrad"
+m._COPYRIGHT = "Copyright (c) 2010-2013 Francois Perrad"
 return m
 --
 -- This library is licensed under the terms of the MIT/X11 license,

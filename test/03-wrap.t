@@ -4,7 +4,7 @@ local Spore = require 'Spore'
 
 require 'Test.More'
 
-plan(31)
+plan(42)
 
 local status = 200
 require 'Spore.Protocols'.request = function (req) return { request = req, status = status } end -- mock
@@ -30,14 +30,18 @@ is( env.spore.params.border, 'border' )
 error_like( function () client:get_user_info{} end,
             "payload is required for method get_user_info" )
 
-error_like( function () client:get_user_info{ payload = '@file' } end,
+error_like( function () client:get_user_info{ payload = 'opaque data' } end,
             "user is required for method get_user_info" )
+
+local res = client:get_user_info{ user = 'joe', payload = 'OPAQUE' }
+local env = res.request.env
+is( env.spore.payload, 'OPAQUE', 'opaque payload' )
 
 local res = client:get_info{ user = 'joe' }
 local env = res.request.env
 is( env.spore.params.user, 'joe' )
 
-error_like( function () client:get_info{ payload = '@file' } end,
+error_like( function () client:get_info{ payload = 'opaque data' } end,
             "payload is not expected for method get_info" )
 
 error_like( function () client:get_info{ mode = 'raw' } end,
@@ -49,7 +53,7 @@ lives_ok( function () client:get_info{ mode = 'raw' } end )
 Spore.errors = io.tmpfile()
 status = 404
 r, ex = pcall( function ()
-    local res = client:get_user_info{ payload = '@file', user = 'john' }
+    local res = client:get_user_info{ payload = 'opaque data', user = 'john' }
 end)
 is( r, false, "exception" )
 is( tostring(ex), "404 not expected", "404 not expected" )
@@ -87,3 +91,43 @@ is( env.PATH_INFO, '/restapi/get_info' )
 nok( env.QUERY_STRING )
 is( res.request.url, 'http://services.org/restapi/get_info' )
 
+local client = Spore.new_from_string([[
+{
+    "base_url" : "http://services.org:9999/restapi/",
+    "methods" : {
+        "action" : {
+            "path" : "/doit/:prm1",
+            "method" : "POST",
+            "required_params" : [
+                "prm1",
+                "prm2"
+            ],
+            "optional_params" : [
+                "prm3",
+                "prm4"
+            ],
+            "payload" : [
+                "prm2",
+                "prm3"
+            ],
+        }
+    }
+}
+]])
+type_ok( client, 'table', "payload")
+local res = client:action{ prm1 = 'action1', prm2 = 2, prm3 = 'val3', prm4 = 'val4' }
+local env = res.request.env
+is( env.PATH_INFO, '/restapi/doit/action1' )
+is( res.request.url, 'http://services.org:9999/restapi/doit/action1?prm4=val4' )
+local spore = env.spore
+type_ok( spore.payload, 'table', 'payload')
+is( spore.payload.prm2, 2 )
+is( spore.payload.prm3, 'val3' )
+
+local res = client:action{ prm1 = 'action1', prm2 = 2, payload = 'this OPAQUE payload will be trashed' }
+local env = res.request.env
+is( res.request.url, 'http://services.org:9999/restapi/doit/action1' )
+local spore = env.spore
+type_ok( spore.payload, 'table', 'payload')
+is( spore.payload.prm2, 2 )
+is( spore.payload.prm3, nil )

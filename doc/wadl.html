@@ -2,13 +2,13 @@
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>lua-Spore - Homepage</title>
+  <title>Module Spore.WADL</title>
     <link rel="stylesheet" href="http://www.keplerproject.org/doc.css" type="text/css"/>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta http-equiv="Author" content="Fran&ccedil;ois Perrad"/>
   <meta http-equiv="Language" content="en"/>
-  <meta http-equiv="Description" content="Homepage of lua-Spore"/>
-  <meta http-equiv="Keywords" content="lua, SPORE, ReST, ReSTapi, ReSTful"/>
+  <meta http-equiv="Description" content="Module Spore.WADL"/>
+  <meta http-equiv="Keywords" content="lua, SPORE, ReST, ReSTapi, ReSTful, new_from_wadl, WADL"/>
 </head>
 
 <body>
@@ -28,9 +28,9 @@
 <div id="main">
 
 <div id="navigation">
-<h1>lua-Spore</h1>
+<h1>S.WADL</h1>
   <ul>
-    <li><strong>Home</strong>
+    <li><a href="index.html">Home</a>
       <ul>
         <li><a href="index.html#overview">Overview</a></li>
         <li><a href="index.html#references">References</a></li>
@@ -65,8 +65,8 @@
         <li><a href="middleware.html#dnt">DoNotTrack</a></li>
         <li><a href="middleware.html#logging">Logging</a></li>
         <li><a href="middleware.html#mock">Mock</a></li>
-        <li><a href="middleware.html#redirection">Redirection</a></li>
         <li><a href="middleware.html#runtime">Runtime</a></li>
+        <li><a href="middleware.html#redirection">Redirection</a></li>
         <li><a href="middleware.html#useragent">UserAgent</a></li>
       </ul>
     </li>
@@ -76,7 +76,7 @@
         <li><a href="discovery.html#examples">Examples</a></li>
       </ul>
     </li>
-    <li><a href="wadl.html">module <code>S.WADL</code></a>
+    <li><strong>module <code>S.WADL</code></strong>
       <ul>
         <li><a href="wadl.html#reference">Reference</a></li>
         <li><a href="wadl.html#examples">Examples</a></li>
@@ -93,69 +93,51 @@
 
 <div id="content">
 
-<h2><a name="overview"></a>Overview</h2>
+<h2><a name="reference"></a>Reference</h2>
 
-<p>lua-Spore is an implementation of <a href="http://github.com/SPORE/specifications">SPORE</a>
-(Specification to a POrtable Rest Environment).</p>
+<p>This module allows to use a <a href="http://www.w3.org/Submission/wadl/">Web Application Description Language</a>
+document as a SPORE specification.</p>
 
-<h2><a name="references"></a>References</h2>
+<p><strong>LIMITATION :</strong> cross-references are not supported.</p>
 
-<p>Some specifications of service are available at
-<a href="http://github.com/SPORE/api-description">http://github.com/SPORE/api-description</a>.
-</p>
+<p>This module requires <a href="http://www.keplerproject.org/luaexpat/">LuaExpat</a>.</p>
 
-<h2><a name="status"></a>Status</h2>
+<h3>Global Functions</h3>
 
-<p>lua-Spore is in beta stage.</p>
+<h4><code>new_from_wadl( desc, [, { options }] )</code></h4>
 
-<p>It's developed for Lua 5.1 &amp; 5.2.</p>
+<p>Instanciate a ReST client from a
+<a href="http://www.w3.org/Submission/wadl/">WADL</a> document
+defined by an URL or a filename.</p>
 
-<h2><a name="download"></a>Download</h2>
-
-<p>lua-Spore source can be downloaded from
-<a href="http://github.com/fperrad/lua-Spore/downloads/">GitHub</a>.</p>
-
-<h2><a name="installation"></a>Installation</h2>
-
-<p>lua-Spore is available via LuaRocks:</p>
+<p>The optional table <code>options</code> allows to overwrite some parameters of the description
+(see <code>new_from_spec</code>).</p>
 
 <pre class="example">
-luarocks install lua-spore
+local wadl = require 'Spore.WADL'
+local client = wadl.new_from_wadl 'yahoo_news_search.wadl'
 </pre>
 
-<p>or manually (LuaSocket and LuaJSON required), with:</p>
+
+<h4><code>convert( wadl )</code></h4>
+
+<p>Converts a <a href="http://www.w3.org/Submission/wadl/">WADL</a> document
+into a SPORE specification (represented by a <code>table</code>).</p>
+
+<h3>Utilities</h3>
+
+<h4><code>wadl2spore url</code></h4>
+
+<p>Converts a WADL document into a Spore Specification.
+By this way, the SPORE specification could be edited/modified before use.</p>
 
 <pre class="example">
-make install
+$ wadl2spore yahoo_news_search.wadl > yahoo_news_search.json
 </pre>
 
-<h2><a name="test"></a>Test</h2>
+<h2><a name="examples"></a>Examples</h2>
 
-<p>The test suite requires the modules
-<a href="http://fperrad.github.com/lua-TestMore">lua-TestMore</a> and
-<a href="http://fperrad.github.com/lua-TestLongString">lua-TestLongString</a>.</p>
-
-<pre class="example">
-make test
-</pre>
-
-<h2><a name="license"></a>Copyright and License</h2>
-
-<p>Copyright &copy; 2010-2012 Fran&ccedil;ois Perrad
-<a href="http://www.ohloh.net/accounts/4780?ref=Rank">
-  <img alt="ohloh profile for Fran&ccedil;ois Perrad"
-       height="24" width="32" style="border-width:0"
-       src="http://www.ohloh.net/accounts/4780/widgets/account_rank.gif"/>
-</a>
-<a href="http://www.linkedin.com/in/fperrad">
-  <img alt="View Fran&ccedil;ois Perrad's profile on LinkedIn"
-       width="80" height="15" style="border-width:0"
-       src="http://www.linkedin.com/img/webpromo/btn_liprofile_blue_80x15.gif"/>
-</a>
-</p>
-
-<p>This library is licensed under the terms of the MIT/X11 license,
-like Lua itself.</p>
+<p>Not yet.</p>
 
 </div> <!-- id="content" -->
 

@@ -109,10 +109,6 @@ local function request (req)
 
     local payload = spore.payload
     if payload then
-        if payload:sub(1, 1) == '@' then
-            local fname = payload:sub(2)
-            payload = slurp(fname)
-        end
         req.source = ltn12.source.string(payload)
         req.headers['content-length'] = payload:len()
         req.headers['content-type'] = req.headers['content-type'] or 'application/x-www-form-urlencoded'
@@ -127,7 +123,7 @@ local function request (req)
 
     if spore.debug then
         spore.debug:write(req.method, " ", req.url, "\n")
-        for k, v in pairs(req.headers) do
+        for k, v in pairs(req.headers or {}) do
             spore.debug:write(k, ": ", v, "\n")
         end
     end
@@ -146,7 +142,7 @@ m.request = request
 
 return m
 --
--- Copyright (c) 2010-2011 Francois Perrad
+-- Copyright (c) 2010-2013 Francois Perrad
 --
 -- This library is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.

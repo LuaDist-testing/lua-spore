@@ -1,7 +1,7 @@
 package = 'lua-Spore'
 version = '@version@-@rev@'
 source = {
-    url = 'http://cloud.github.com/downloads/fperrad/lua-Spore/lua-spore-@version@.tar.gz',
+    url = 'http://sites.google.com/site/fperrad/lua-spore-@version@.tar.gz',
     md5 = '@md5@',
     dir = 'lua-Spore-@version@',
 }
@@ -57,9 +57,14 @@ build = {
         ['Spore.Middleware.UserAgent']          = 'src/Spore/Middleware/UserAgent.lua',
         ['Spore.Protocols']                     = 'src/Spore/Protocols.lua',
         ['Spore.Request']                       = 'src/Spore/Request.lua',
+        ['Spore.WADL']                          = 'src/Spore/WADL.lua',
+        ['Spore.XML']                           = 'src/Spore/XML.lua',
     },
     install = {
-        bin = { 'src/discovery2spore' }
+        bin = {
+            'src/discovery2spore',
+            'src/wadl2spore',
+        }
     },
     copy_directories = { 'doc', 'test' },
 }
