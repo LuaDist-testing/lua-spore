@@ -1,17 +1,17 @@
 -- This file was automatically generated for the LuaDist project.
 
 package = 'lua-Spore'
-version = '0.1.1-2'
+version = '0.1.2-1'
 -- LuaDist source
 source = {
-  tag = "0.1.1-2",
+  tag = "0.1.2-1",
   url = "git://github.com/LuaDist-testing/lua-spore.git"
 }
 -- Original source
 -- source = {
---     url = 'http://luaforge.net/frs/download.php/4822/lua-spore-0.1.1.tar.gz',
---     md5 = '91be7ccbdba044175d146e1b8e3047bd',
---     dir = 'lua-Spore-0.1.1',
+--     url = 'http://cloud.github.com/downloads/fperrad/lua-Spore/lua-spore-0.1.2.tar.gz',
+--     md5 = 'e5f12b2084f9cc0b5d63d0be9dea0ee2',
+--     dir = 'lua-Spore-0.1.2',
 -- }
 description = {
     summary = "a generic ReST client",

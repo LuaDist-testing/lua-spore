@@ -180,7 +180,8 @@ local r = client:get_user_info{ user = 'John' }
 
 <h3>Instance Methods</h3>
 
-<p>These methods are inherited from <code>Spore.Core</code>.</p>
+<p>These methods are inherited from <code>Spore.Core</code>
+(so, do not use these name in API description).</p>
 
 <h4><code>enable( middleware [, args] )</code></h4>
 
@@ -242,7 +243,7 @@ end
 <pre class="example">
 local Spore = require 'Spore'
 
-local github = Spore.new_from_spec 'http://github.com/SPORE/api-description/raw/master/services/github.json'
+local github = Spore.new_from_spec 'https://raw.github.com/SPORE/api-description/master/services/github.json'
 github:enable 'Format.JSON'
 github:enable('Auth.Basic', {
     username = 'schacon/token',
@@ -261,7 +262,7 @@ print(res.body.user.name)       --> Scott Chacon
 <pre class="example">
 local Spore = require 'Spore'
 
-local github = Spore.new_from_spec('http://github.com/SPORE/api-description/raw/master/services/github.json', {
+local github = Spore.new_from_spec('https://raw.github.com/SPORE/api-description/master/services/github.json', {
     base_url = "https://github.com/api/v2/",
 })
 github:enable 'Format.JSON'
@@ -277,7 +278,7 @@ print(res.body.user.name)       --> Scott Chacon
 <a href="http://guide.couchdb.org/draft/api.html">CouchDB, The Definitif Guide</a>.</p>
 
 <pre class="example">
-local base = 'http://github.com/SPORE/api-description/apps/couchdb/'
+local base = 'https://raw.github.com/SPORE/api-description/master/apps/couchdb/'
 local couchdb = require 'Spore'.new_from_spec(
     base .. 'server.json',
     base .. 'database.json',
@@ -407,13 +408,13 @@ local Spore = require 'Spore'
 --Spore.debug = io.stdout
 
 local function get_google_keys (scope, keys)
-    local oauth = require 'Spore'.new_from_spec 'https://github.com/SPORE/api-description/raw/master/services/googleoauth.json'
+    local oauth = require 'Spore'.new_from_spec 'https://raw.github.com/SPORE/api-description/master/services/googleoauth.json'
     oauth:enable('Auth.OAuth', keys)
     local r1 = oauth:get_request_token{
         scope = scope,
     }
     print("request", r1.body)
-    for k, v in r1.body:gmatch'([^&=]+)=([^&=]*)&?' do keys[k] = url.unescape(v) end
+    for k, v in r1.body:gmatch'([^&amp;=]+)=([^&amp;=]*)&amp;?' do keys[k] = url.unescape(v) end
 
     local r2 = oauth:authorize_token{ oauth_token = keys.oauth_token }
     print("authorize", r2.status, r2.headers.location)
@@ -427,7 +428,7 @@ local function get_google_keys (scope, keys)
 
     local r3 = oauth:get_access_token()
     print("access", r3.body)
-    for k, v in r3.body:gmatch'([^&=]+)=([^&=]*)&?' do keys[k] = url.unescape(v) end
+    for k, v in r3.body:gmatch'([^&amp;=]+)=([^&amp;=]*)&amp;?' do keys[k] = url.unescape(v) end
 
     keys.oauth_callback_confirmed = nil
     keys.oauth_verifier = nil
@@ -435,7 +436,7 @@ local function get_google_keys (scope, keys)
 end
 
 
-local client = require 'Spore'.new_from_spec 'https://github.com/SPORE/api-description/raw/master/services/googleshortener.json'
+local client = require 'Spore'.new_from_spec 'https://raw.github.com/SPORE/api-description/master/services/googleshortener.json'
 client:enable 'Format.JSON'
 client:enable('Auth.OAuth', get_google_keys('https://www.googleapis.com/auth/urlshortener', {
     oauth_consumer_key    = '000000000000.apps.googleusercontent.com',

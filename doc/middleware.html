@@ -118,6 +118,8 @@ client:enable('Auth.AWS', {
 
 <h2><a name="basic"></a>Spore.Middleware.Auth.Basic</h2>
 
+<p>This middleware adds a header <code>authorization</code> in the request.</p>
+
 <pre class="example">
 client:enable('Auth.Basic', {
     username = 'schacon/token',
@@ -127,6 +129,8 @@ client:enable('Auth.Basic', {
 
 <h2><a name="bearer"></a>Spore.Middleware.Auth.Bearer</h2>
 
+<p>This middleware adds a header <code>authorization</code> in the request.</p>
+
 <pre class="example">
 client:enable('Auth.Bearer', {
     bearer_token = 'vF9dft4qmT',
@@ -134,6 +138,8 @@ client:enable('Auth.Bearer', {
 </pre>
 
 <h2><a name="oauth"></a>Spore.Middleware.Auth.OAuth</h2>
+
+<p>This middleware adds a header <code>authorization</code> in the request.</p>
 
 <p>This middleware requires <a href="http://luacrypto.luaforge.net/">luacrypto</a>.</p>
 
@@ -152,11 +158,15 @@ client:enable('Auth.OAuth', {
 
 <h2><a name="json"></a>Spore.Middleware.Format.JSON</h2>
 
+<p>This middleware encodes the parameter <code>payload</code> and decodes the body of the response.</p>
+
 <pre class="example">
 client:enable 'Format.JSON'
 </pre>
 
 <h2><a name="xml"></a>Spore.Middleware.Format.XML</h2>
+
+<p>This middleware encodes the parameter <code>payload</code> and decodes the body of the response.</p>
 
 <p>This middleware requires <a href="http://www.keplerproject.org/luaexpat/">LuaExpat</a>.</p>
 
@@ -174,7 +184,23 @@ client:enable('Format.XML', {
 },
 </pre>
 
+<p>The function <code>to_xml( table [, options] )</code> is also exported by this module.</p>
+
+<pre class="example">
+local to_xml = require 'Spore.Middleware.Format.XML'.to_xml
+
+print(to_xml(payload, {
+    indent      = '  ',
+    key_attr    = {
+        tagname = attrname,
+        ...
+    },
+}))
+</pre>
+
 <h2><a name="yaml"></a>Spore.Middleware.Format.YAML</h2>
+
+<p>This middleware encodes the parameter <code>payload</code> and decodes the body of the response.</p>
 
 <p>This middleware requires <a href="http://luaforge.net/projects/luayaml/">luaYAML</a>.</p>
 
@@ -183,6 +209,8 @@ client:enable 'Format.YAML'
 </pre>
 
 <h2><a name="default"></a>Spore.Middleware.Parameter.Default</h2>
+
+<p>This middleware set some parameters with default value.</p>
 
 <pre class="example">
 client:enable('Parameter.Default', {
@@ -193,6 +221,8 @@ client:enable('Parameter.Default', {
 
 <h2><a name="force"></a>Spore.Middleware.Parameter.Force</h2>
 
+<p>This middleware forces some parameters.</p>
+
 <pre class="example">
 client:enable('Parameter.Force', {
     format = 'json',
@@ -201,6 +231,8 @@ client:enable('Parameter.Force', {
 </pre>
 
 <h2><a name="proxy"></a>Spore.Middleware.Proxy.Basic</h2>
+
+<p>This middleware handles HTTP proxy.</p>
 
 <pre class="example">
 client:enable('Proxy.Basic', {
@@ -216,6 +248,8 @@ client:enable 'Proxy.Basic'     -- uses HTTP_PROXY=http://john:s3kr3t@proxy.myor
 
 <h2><a name="cache"></a>Spore.Middleware.Cache</h2>
 
+<p>This middleware supplies a local cache (implemented with a weak table).</p>
+
 <pre class="example">
 client:enable 'Cache'
 </pre>
@@ -224,11 +258,15 @@ client:enable 'Cache'
 
 <h2><a name="dnt"></a>Spore.Middleware.DoNotTrack</h2>
 
+<p>This middleware adds a header <code>x-do-not-track</code> with the value <code>1</code> in the request.</p>
+
 <pre class="example">
 client:enable 'DoNotTrack'
 </pre>
 
 <h2><a name="logging"></a>Spore.Middleware.Logging</h2>
+
+<p>This middleware registers a logger in <code>env.sporex.logger</code> for use by others middlewares.</p>
 
 <p>This middleware requires <a href="http://www.keplerproject.org/lualogging/">LuaLogging</a>.</p>
 
@@ -241,6 +279,8 @@ client:enable('Logging', {
 </pre>
 
 <h2><a name="mock"></a>Spore.Middleware.Mock</h2>
+
+<p>This middleware allows to register a set of couple (condition, response).</p>
 
 <pre class="example">
 rules = {
@@ -255,13 +295,15 @@ client:enable('Mock', rules)
 
 <h2><a name="redirection"></a>Spore.Middleware.Redirection</h2>
 
-<p>This middleware handles the header <code>Location</code>.</p>
+<p>This middleware handles the header <code>location</code> in the response.</p>
 
 <pre class="example">
 client:enable 'Redirection'
 </pre>
 
 <h2><a name="runtime"></a>Spore.Middleware.Runtime</h2>
+
+<p>This middleware adds a header <code>x-spore-runtime</code> (unit is seconds) in the response.</p>
 
 <pre class="example">
 client:enable 'Runtime'
@@ -270,6 +312,8 @@ print(response.headers['x-spore-runtime']
 </pre>
 
 <h2><a name="useragent"></a>Spore.Middleware.UserAgent</h2>
+
+<p>This middleware overloads the header <code>useragent</code> in the request.</p>
 
 <pre class="example">
 client:enable('UserAgent', {

@@ -51,6 +51,7 @@ test/23-aws.t
 test/24-bearer.t
 test/31-format_json.t
 test/32-format_yaml.t
+test/33-format_to_xml.t
 test/33-format_xml.t
 test/34-format_xml.t
 test/41-proxy_basic.t

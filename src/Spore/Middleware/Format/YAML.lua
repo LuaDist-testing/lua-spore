@@ -20,7 +20,7 @@ function m:call (req)
     end
     req.headers['accept'] = 'text/x-yaml'
     return  function (res)
-                if res.body then
+                if res.body and res.body ~= '' then
                     local r, msg = pcall(function ()
                         res.body = yaml.load(res.body)
                     end)
@@ -29,7 +29,9 @@ function m:call (req)
                             spore.errors:write(msg)
                             spore.errors:write(res.body, "\n")
                         end
-                        raises(res, msg)
+                        if res.status == 200 then
+                            raises(res, msg)
+                        end
                     end
                 end
                 return res
@@ -38,7 +40,7 @@ end
 
 return m
 --
--- Copyright (c) 2010 Francois Perrad
+-- Copyright (c) 2010-2011 Francois Perrad
 --
 -- This library is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.

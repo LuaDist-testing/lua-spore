@@ -63,14 +63,18 @@ function m:finalize (oauth)
     local path_info = env.PATH_INFO
     local query_string = env.QUERY_STRING
     local form_data = {}
-    for k, v in pairs(spore.form_data or {}) do form_data[k] = v end
+    for k, v in pairs(spore.form_data or {}) do
+        form_data[tostring(k)] = tostring(v)
+    end
     local headers = {}
-    for k, v in pairs(spore.headers or {}) do headers[k] = v end
+    for k, v in pairs(spore.headers or {}) do
+        headers[tostring(k):lower()] = tostring(v)
+     end
     local payload = spore.payload
     local query, query_keys, query_vals = {}, {}, {}
     if query_string then
         if oauth then
-            for k, v in query_string:gmatch '([^=]+)=([^&])&?' do
+            for k, v in query_string:gmatch '([^=]+)=([^&]+)&?' do
                 query_keys[#query_keys+1] = k
                 query_vals[k] = v
             end
@@ -85,8 +89,6 @@ function m:finalize (oauth)
         local n
         path_info, n = path_info:gsub(':' .. k, (escape_path(v):gsub('%%', '%%%%')))
         for kk, vv in pairs(form_data) do
-            kk = tostring(kk)
-            vv = tostring(vv)
             local nn
             vv, nn = vv:gsub(':' .. k, v)
             if nn > 0 then
@@ -96,8 +98,6 @@ function m:finalize (oauth)
             end
         end
         for kk, vv in pairs(headers) do
-            kk = tostring(kk)
-            vv = tostring(vv)
             local nn
             vv, nn = vv:gsub(':' .. k, v)
             if nn > 0 then
@@ -144,7 +144,7 @@ function m:finalize (oauth)
         }
         for k, v in pairs(spore.params) do
             k = tostring(k)
-            if k ~= 'realm' and not query_vals[k] then
+            if k:match'^oauth_' and not query_vals[k] then
                 query_keys[#query_keys+1] = k
                 query_vals[k] = escape5849(tostring(v))
             end
