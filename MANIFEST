@@ -4,7 +4,9 @@ COPYRIGHT
 MANIFEST
 Makefile
 README.md
-dist.cmake
+cmake/FindLua.cmake
+cmake/dist.cmake
+cmake/lua.cmake
 dist.info
 doc/Makefile
 doc/discovery.html
@@ -19,6 +21,7 @@ src/Spore/GoogleDiscovery.lua
 src/Spore/Middleware/Auth/AWS.lua
 src/Spore/Middleware/Auth/Basic.lua
 src/Spore/Middleware/Auth/Bearer.lua
+src/Spore/Middleware/Auth/DataPublica.lua
 src/Spore/Middleware/Auth/Digest.lua
 src/Spore/Middleware/Auth/OAuth.lua
 src/Spore/Middleware/Cache.lua
@@ -57,6 +60,7 @@ test/22-oauth.t
 test/23-aws.t
 test/24-bearer.t
 test/25-auth_digest.t
+test/26-datapublica.t
 test/31-format_json.t
 test/32-format_yaml.t
 test/33-format_to_xml.t

@@ -8,7 +8,7 @@
   <meta http-equiv="Author" content="Fran&ccedil;ois Perrad"/>
   <meta http-equiv="Language" content="en"/>
   <meta http-equiv="Description" content="Module Spore.Middleware"/>
-  <meta http-equiv="Keywords" content="lua, Spore, ReST, ReSTapi, ReSTful, middleware"/>
+  <meta http-equiv="Keywords" content="lua, Spore, ReST, ReSTapi, ReSTful, middleware, DataPublica"/>
 </head>
 
 <body>
@@ -52,6 +52,7 @@
         <li><a href="middleware.html#aws">Auth.AWS</a></li>
         <li><a href="middleware.html#basic">Auth.Basic</a></li>
         <li><a href="middleware.html#bearer">Auth.Bearer</a></li>
+        <li><a href="middleware.html#publica">Auth.DataPublica</a></li>
         <li><a href="middleware.html#digest">Auth.Digest</a></li>
         <li><a href="middleware.html#oauth">Auth.OAuth</a></li>
         <li><a href="middleware.html#json">Format.JSON</a></li>
@@ -105,7 +106,7 @@ return m
 <p>This middleware implements the authentication for Amazon Web Services,
 see the <a href="http://docs.amazonwebservices.com/AmazonS3/latest/dev/index.html?RESTAuthentication.html">ref doc</a>.</p>
 
-<p>This middleware requires <a href="http://luacrypto.luaforge.net/">luacrypto</a>.</p>
+<p>This middleware requires <a href="http://mkottman.github.com/luacrypto/">luacrypto</a>.</p>
 
 <p>This middleware should be loaded as the last middleware,
 because it directly sends the request.</p>
@@ -144,6 +145,25 @@ client:enable('Auth.Bearer', {
 })
 </pre>
 
+<h2><a name="publica"></a>Spore.Middleware.Auth.DataPublica</h2>
+
+<p>This middleware implements the authentication for
+<a href="http://www.data-publica.com/content/api/">DataPublica</a>.</p>
+
+<p>This middleware requires <a href="http://mkottman.github.com/luacrypto/">luacrypto</a>.</p>
+
+<p>This middleware should be loaded as the last middleware,
+because it directly sends the request.</p>
+
+<pre class="example">
+local client = Spore.new_from_spec 'https://raw.github.com/SPORE/api-description/master/services/datapublica.json'
+client:enable 'Format.JSON'
+client:enable('Auth.DataPublica', {
+    key      = '356a192c7813b04c54574d18c28d46e6395428ab',
+    password = '30d87add92e7b27ce4',
+})
+</pre>
+
 <h2><a name="digest"></a>Spore.Middleware.Auth.Digest</h2>
 
 <p>This middleware adds a header <code>authorization</code> in the request</p>
@@ -151,7 +171,7 @@ client:enable('Auth.Bearer', {
 <p>The <code>nonce</code> retrieved in the response to the first request is stored
 and used by all following requests.</p>
 
-<p>This middleware requires <a href="http://luacrypto.luaforge.net/">luacrypto</a>.</p>
+<p>This middleware requires <a href="http://mkottman.github.com/luacrypto/">luacrypto</a>.</p>
 
 <pre class="example">
 client:enable('Auth.Digest', {
@@ -164,7 +184,7 @@ client:enable('Auth.Digest', {
 
 <p>This middleware adds a header <code>authorization</code> in the request.</p>
 
-<p>This middleware requires <a href="http://luacrypto.luaforge.net/">luacrypto</a>.</p>
+<p>This middleware requires <a href="http://mkottman.github.com/luacrypto/">luacrypto</a>.</p>
 
 <p>This middleware should be loaded as the last middleware,
 because it directly sends the request.</p>

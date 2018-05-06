@@ -1,17 +1,17 @@
 -- This file was automatically generated for the LuaDist project.
 
 package = 'lua-Spore'
-version = '0.2.0-1'
+version = '0.2.1-1'
 -- LuaDist source
 source = {
-  tag = "0.2.0-1",
+  tag = "0.2.1-1",
   url = "git://github.com/LuaDist-testing/lua-spore.git"
 }
 -- Original source
 -- source = {
---     url = 'http://cloud.github.com/downloads/fperrad/lua-Spore/lua-spore-0.2.0.tar.gz',
---     md5 = '348d9a293b7917a5e39ebecf89d69615',
---     dir = 'lua-Spore-0.2.0',
+--     url = 'http://cloud.github.com/downloads/fperrad/lua-Spore/lua-spore-0.2.1.tar.gz',
+--     md5 = 'a78fcc331d1d270a090af1035ef6c085',
+--     dir = 'lua-Spore-0.2.1',
 -- }
 description = {
     summary = "a generic ReST client",
@@ -35,7 +35,8 @@ dependencies = {
 --    'luayaml >= 0.5.6',         -- syck 0.55
 --    'lualogging >= 1.1.4',
 --    'luacrypto >= 0.2.0',
-    'lua-testmore >= 0.2.3',
+    'lua-testmore >= 0.3.0',
+    'lua-testlongstring >= 0.2.0',
 }
 build = {
     type = 'builtin',
@@ -46,6 +47,7 @@ build = {
         ['Spore.Middleware.Auth.AWS']           = 'src/Spore/Middleware/Auth/AWS.lua',
         ['Spore.Middleware.Auth.Basic']         = 'src/Spore/Middleware/Auth/Basic.lua',
         ['Spore.Middleware.Auth.Bearer']        = 'src/Spore/Middleware/Auth/Bearer.lua',
+        ['Spore.Middleware.Auth.DataPublica']   = 'src/Spore/Middleware/Auth/DataPublica.lua',
         ['Spore.Middleware.Auth.Digest']        = 'src/Spore/Middleware/Auth/Digest.lua',
         ['Spore.Middleware.Auth.OAuth']         = 'src/Spore/Middleware/Auth/OAuth.lua',
         ['Spore.Middleware.Cache']              = 'src/Spore/Middleware/Cache.lua',
