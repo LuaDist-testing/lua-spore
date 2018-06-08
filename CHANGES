@@ -1,0 +1,66 @@
+Revision history for lua-Spore
+
+0.3.2  Wed Dec 28 09:30:00 2016
+	- middleware could handle thread (see PR#21)
+	- fix POST with body (see PR#22)
+	- shadow _ENV
+	- content-type in middlewares Format.* is exported and updatable
+	- use OpenAPI (Swagger 2.0) as Spore specification
+	- add swagger2spore utility
+
+0.3.1  Sun Feb  1 14:30:00 2015
+	- switch to lyaml which works with Lua 5.2
+
+0.3.0  Sat May 25 10:30:00 2013
+	- SPORE 1.1 : add compatibility with URI Template (RFC 6570)
+	- SPORE 1.1 : handle parameter 'payload' from specification
+	- use WADL document as Spore specification
+		LIMITATION: cross-references are not supported
+	- add wadl2spore utility
+	INCOMPATIBILITY (see http://github.com/fperrad/lua-Spore/issues/12)
+		cli:meth{ payload = '@filename' } is no longer supported,
+		and could be rewritten like this :
+		    local slurp = require 'Spore.Protocols'.slurp
+		    cli:meth{ payload = slurp'filename' }
+
+0.2.1  Sun Sep 16 11:30:00 2012
+	- add middleware Auth.DataPublica
+	- refactor tests for LuaJIT
+	- compat with LuaCrypto 0.3.x
+	- fix AWS signature (thanks to Pierre "catwell" Chapuis)
+
+0.2.0  Sat Mar  3 22:30:00 2012
+	- work with Lua 5.2.0
+	- add LuaDist support
+	INCOMPATIBILITY : now, the use of the following idiom is mandatory
+		local Spore = require 'Spore'
+
+0.1.6  Sun Jul 31 09:30:00 2011
+	- use Google Discovery Document as Spore specification
+	- add discovery2spore utility
+
+0.1.5  Mon Jul 11 15:30:00 2011
+	- refactor Auth.OAuth (all the stuff in the middleware)
+
+0.1.4  Fri Jul  8 12:30:00 2011
+	- refactor Auth.OAuth
+
+0.1.3  Wed Jul  6 12:30:00 2011
+	- add middleware Auth.Digest
+
+0.1.2  Sun Jul  3 21:30:00 2011
+	- downcase Header name
+	- fix OAuth
+	- fix to_xml
+	- improve documentation
+
+0.1.1  Tue Jun 28 10:30:00 2011
+	- define a specific escape function for URI
+	- add middleware Auth.AWS (thanks to Alexander Gladysh & Vladimir Fedin)
+	- fix new_from_spec() with URL (slurp)
+	- fix wrap() when path is empty
+	- add middleware Auth.Bearer
+	- add middleware DoNotTrack
+
+0.1.0  Fri Nov 26 10:30:00 2010
+	First release

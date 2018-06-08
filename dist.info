@@ -1,0 +1,15 @@
+
+name = "lua-spore"
+version = "0.3.2"
+
+desc = "a generic ReST client"
+author = "Francois Perrad"
+license = "MIT/X11"
+url = "http://fperrad.github.io/lua-Spore/"
+maintainer = "Francois Perrad"
+
+depends = {
+    "lua ~> 5.1",
+    "luasocket >= 2.0.2",
+    "luajson >= 1.1",
+}
