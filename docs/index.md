@@ -7,7 +7,9 @@
 
 lua-Spore is an implementation of
 [SPORE](http://github.com/SPORE/specifications)
-(Specification to a POrtable Rest Environment).
+(Specification to a POrtable Rest Environment) which is a
+[RESTful API Description Language](https://en.wikipedia.org/wiki/Overview_of_RESTful_API_Description_Languages)
+with a generic client implementation based on pluggable [middlewares](middleware).
 
 ## References
 
@@ -50,7 +52,7 @@ make test
 
 ## Copyright and License
 
-Copyright &copy; 2010-2016 Fran&ccedil;ois Perrad
+Copyright &copy; 2010-2018 Fran&ccedil;ois Perrad
 [![OpenHUB](http://www.openhub.net/accounts/4780/widgets/account_rank.gif)](http://www.openhub.net/accounts/4780?ref=Rank)
 [![LinkedIn](http://www.linkedin.com/img/webpromo/btn_liprofile_blue_80x15.gif)](http://www.linkedin.com/in/fperrad)
 

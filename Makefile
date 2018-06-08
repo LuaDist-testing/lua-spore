@@ -4,7 +4,7 @@ VERSION := $(shell cd src && $(LUA) -e "m = require [[Spore]]; print(m._VERSION)
 TARBALL := lua-spore-$(VERSION).tar.gz
 REV     := 1
 
-LUAVER  := 5.1
+LUAVER  := 5.3
 PREFIX  := /usr/local
 DPREFIX := $(DESTDIR)$(PREFIX)
 BINDIR  := $(DPREFIX)/bin
@@ -135,7 +135,7 @@ coverage:
 coveralls:
 	rm -f ./luacov.stats.out ./luacov.report.out
 	-prove --exec="$(LUA) -lluacov" ./test/*.t
-	luacov-coveralls -e ^/usr -e %.t$
+	luacov-coveralls -e /HERE/ -e %.t$
 
 README.html: README.md
 	Markdown.pl README.md > README.html
