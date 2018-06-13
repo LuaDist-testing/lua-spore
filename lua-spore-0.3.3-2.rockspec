@@ -1,15 +1,15 @@
 -- This file was automatically generated for the LuaDist project.
 
 package = 'lua-Spore'
-version = '0.3.3-1'
+version = '0.3.3-2'
 -- LuaDist source
 source = {
-  tag = "0.3.3-1",
-  url = "git://github.com/LuaDist-testing/lua-spore.git"
+  url = "git://github.com/LuaDist-testing/lua-spore.git",
+  tag = "0.3.3-2"
 }
 -- Original source
 -- source = {
---     url = 'http://github.com/fperrad/lua-Spore/raw/releases/lua-spore-0.3.3.tar.gz',
+--     url = 'https://framagit.org/fperrad/lua-Spore/raw/releases/lua-spore-0.3.3.tar.gz',
 --     md5 = '560f63278c5026dde494506ab3d31ed2',
 --     dir = 'lua-Spore-0.3.3',
 -- }
@@ -22,7 +22,7 @@ description = {
         Some specifications of service are available at
         http://github.com/SPORE/api-description.
     ]],
-    homepage = 'http://fperrad.github.io/lua-Spore/',
+    homepage = 'http://fperrad.frama.io/lua-Spore/',
     maintainer = 'Francois Perrad',
     license = 'MIT/X11'
 }
